@@ -1,0 +1,57 @@
+version: '3'
+services:
+  redis5:
+    container_name: redis5
+    image: redis:5.0.8-alpine3.11
+    ports:
+      - 56379:6379
+    volumes:
+      - ./.volumes/redis5/data:/data
+  mysql5:
+    container_name: mysql5
+    image: mysql:5.7.28
+    environment:
+      MYSQL_ROOT_PASSWORD: pa55w0rd
+      MYSQL_USER: mike
+      MYSQL_PASSWORD: pa55w0rd5
+    ports:
+      - 53305:3306
+    volumes:
+      - ./.volumes/mysql5/data:/var/lib/mysql
+  mysql8:
+    container_name: mysql8
+    image: mysql:8.0.19
+    environment:
+      MYSQL_ROOT_PASSWORD: pa55w0rd
+      MYSQL_USER: mike
+      MYSQL_PASSWORD: pa55w0rd8
+    ports:
+      - 53308:3306
+    volumes:
+      - ./.volumes/mysql8/data:/var/lib/mysql
+  pg12:
+    container_name: pg12
+    image: postgres:12.2-alpine
+    environment:
+      POSTGRES_PASSWORD: pa55w0rd
+      POSTGRES_USER: mike
+    ports:
+      - 55432:5432
+    volumes:
+      - ./.volumes/pg12/data:/var/lib/postgresql/data
+  rabbitmq3:
+    container_name: rabbitmq3
+    image: rabbitmq:3.8.3-management-alpine
+    environment:
+      RABBITMQ_ERLANG_COOKIE: c00k1e
+    ports:
+      - 55670:4369
+      - 55671:5671
+      - 55672:5672
+      - 55673:15671
+      - 55674:15672
+      - 55675:15675
+      - 55676:25672
+      - 55683:1883
+    volumes:
+      - ./.volumes/rabbitmq3/data:/var/lib/rabbitmq
