@@ -1,0 +1,9 @@
+{
+  "editor.renderWhitespace": "all",
+  "editor.wordWrap": "on",
+  "editor.suggestSelection": "first",
+  "files.insertFinalNewline": true,
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "gitblame.ignoreWhitespace": true,
+  "python.showStartPage": false
+}
