@@ -99,4 +99,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
+eval "$(pyenv init -)" # brew install pyenv; pyenv install 3.8.5; pyenv global 3.8.5
+eval "$(rbenv init -)" # brew install rbenv; rbenv install 2.6.6; rbenv global 2.6.5
+alias mysql5="/usr/local/opt/mysql-client@5.7/bin/mysql" # brew install mysql-client@5.7
+alias mysql="/usr/local/opt/mysql-client@8.0/bin/mysql" # brew install mysql-client
+alias psql="/usr/local/opt/libpq/bin/psql" # brew install libpq
