@@ -1,1 +1,5 @@
 .DS_Store
+.kube
+.oh-my-zsh
+.zsh_history
+.zcompdump*
