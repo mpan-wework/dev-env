@@ -68,7 +68,7 @@ ZSH_THEME="k8s"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions kube-ps1)
+plugins=(emoji git kube-ps1 zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,5 +98,5 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias k="kubectl"
-rm -rf /root/.zcompdump-*
+source '/root/.oh-my-zsh/custom/plugins/kube-ps1/kube-ps1.sh'
+# source <(kubectl completion zsh)
