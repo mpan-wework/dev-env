@@ -10,7 +10,7 @@ prompt_indicator() {
 }
 
 current_date_time() {
-    echo "%{$fg[yellow]%}%D{W%W-D%j %a %Y-%m-%f %H:%M:%S}"
+    echo "%{$fg[yellow]%}%D{W%W-D%j %a %Y-%m-%d %H:%M:%S}"
 }
 
 return_status() {
