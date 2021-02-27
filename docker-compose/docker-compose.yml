@@ -70,3 +70,16 @@ services:
       - ./.volumes/jenkins/data:/var/jenkins_home
       - ./jenkins/casc.yaml:/var/jenkins_home/jenkins.yaml
       - /var/run/docker.sock:/var/run/docker.sock # share host docker daemon with container
+  mssql19:
+    container_name: mssql2019
+    image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
+    user: root
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: Pa55w0rd!
+      MSSQL_PID: Express
+    ports:
+      - 51433:1433
+      - 51434:1434
+    volumes:
+      - ./.volumes/mssql19/data:/var/opt/mssql
