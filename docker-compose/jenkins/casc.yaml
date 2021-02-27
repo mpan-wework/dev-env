@@ -1,0 +1,18 @@
+jenkins:
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  disableRememberMe: true
+  remotingSecurity:
+    enabled: true
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+      - id: admin
+        name: admin
+        password: Pa55w0rd!
+unclassified:
+  location:
+    url: http://127.0.0.1:58080/

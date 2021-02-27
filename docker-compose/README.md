@@ -73,3 +73,29 @@ exit
 ### rabbitmq
 
 Visit http://localhost:55674/ and run `ruby /bunny-client/send_and_receive.rb`
+
+### jenkins
+
+Visit http://127.0.0.1:58080/ with account in `jenkins/casc.yaml`
+
+1. Create credentials
+
+    `Manage Jenkins` => `Security` => `Manage Credentials` => `Jenkins` (in the list on the right) => `Global credentials (unrestricted)` => `Add Credentials`
+
+    1. `Username with password`: `demo_username` and `demo_password` (ID: `demo-userpass`)
+    1. `SSH Username with private key`: `[your-github-username]` and pasted ssh private key (ID: `scm-credentials`)
+
+1. Create job
+
+    `Dashboard` => `New Item` => Name `demo` => `Pipeline` => `OK`
+
+      * `Definition`: `Pipeline script with SCM`
+      * `SCM`: `git`
+      * `Repository URL`: `git@github.com:mpan-wework/dev-env.git`
+      * `Credentials`: `scm-credentials`
+      * `Branch Specifier`: `*/*`
+      * `Script Path`: `docker-compose/jenkins/demo.jenkinsfile`
+
+    `Save`, `Build Now`
+
+1. Use [`Configuration as Code`](http://127.0.0.1:58080/configuration-as-code/) to migrate configuration

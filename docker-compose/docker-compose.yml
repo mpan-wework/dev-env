@@ -55,3 +55,18 @@ services:
       - 55683:1883
     volumes:
       - ./.volumes/rabbitmq3/data:/var/lib/rabbitmq
+  jenkins:
+    container_name: jenkins
+    build:
+      context: jenkins
+      dockerfile: jenkins.dockerfile
+    environment:
+      JAVA_OPTS: '-Djenkins.install.runSetupWizard=false'
+      CASC_JENKINS_CONFIG: /var/jenkins_home/jenkins.yaml
+    ports:
+      - 58080:8080
+      - 58081:50000
+    volumes:
+      - ./.volumes/jenkins/data:/var/jenkins_home
+      - ./jenkins/casc.yaml:/var/jenkins_home/jenkins.yaml
+      - /var/run/docker.sock:/var/run/docker.sock # share host docker daemon with container

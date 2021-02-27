@@ -1,0 +1,66 @@
+#!groovy
+
+pipeline {
+  agent any
+
+  options {
+    timeout(time: 1, unit: 'HOURS')
+  }
+
+  parameters {
+    choice (
+      name: 'environment',
+      description: 'Environment',
+      choices: [
+        'development',
+        'production'
+      ]
+    )
+
+    string (
+      name: 'comment',
+      description: 'Comment',
+      defaultValue: 'nightly'
+    )
+  }
+
+  environment {
+    SCM_CREDENTIAL = 'git-credentials'
+    PROJECT_NAME = 'demo-project'
+  }
+
+  stages {
+    stage('env') {
+      steps {
+        script {
+          env.GIT_COMMIT_SHORT = "${GIT_COMMIT.take(7)}"
+          sh """
+            echo ${params.environment} ${params.comment} ${PROJECT_NAME} ${GIT_COMMIT} ${env.GIT_COMMIT_SHORT}
+          """
+          buildName("${env.GIT_COMMIT_SHORT} (${params.environment}, ${params.comment})")
+        }
+      }
+    }
+
+    stage('build') {
+      steps {
+        script {
+          withCredentials([
+            usernamePassword(
+              credentialsId: 'demo-userpass',
+              usernameVariable: 'CRED_USER',
+              passwordVariable: 'CRED_PASS'
+            )
+          ]) {
+            sh "echo ${CRED_USER.split('')} ${CRED_PASS.split('')}"
+          }
+          dir('docker-compose/jenkins') {
+            docker.withRegistry('https://registry.hub.docker.com') {
+              docker.build("${PROJECT_NAME}", "-f demo.dockerfile --build-arg NODE_ENV=${params.environment} --build-arg GIT_COMMIT=${env.GIT_COMMIT_SHORT} .")
+            }
+          }
+        }
+      }
+    }
+  }
+}

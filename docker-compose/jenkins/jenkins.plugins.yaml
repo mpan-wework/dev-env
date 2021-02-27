@@ -1,0 +1,14 @@
+plugins:
+  - artifactId: configuration-as-code
+  - artifactId: git # scm
+  - artifactId: workflow-aggregator # pipeline
+    source:
+      version: 2.6
+
+  # https://www.jenkins.io/doc/pipeline/steps/
+  - artifactId: build-name-setter # buildName()
+  - artifactId: credentials-binding # withCredentials()
+  - artifactId: docker-workflow # docker.withRegistry(), docker.build(), docker.image()
+  - artifactId: kubernetes # podTemplate(), containerTemplate()
+  - artifactId: pipeline-utility-steps # readJSON()
+
