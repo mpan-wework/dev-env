@@ -1,12 +1,17 @@
 version: '3'
+networks:
+  dev-env-network:
+    name: dev-env-network
 services:
   redis5:
     container_name: redis5
     image: redis:5.0.8-alpine3.11
     ports:
-      - 56379:6379
+      - 46379:6379
     volumes:
       - ./.volumes/redis5/data:/data
+    networks:
+      - dev-env-network
   mysql5:
     container_name: mysql5
     image: mysql:5.7.28
@@ -29,6 +34,8 @@ services:
       - 53308:3306
     volumes:
       - ./.volumes/mysql8/data:/var/lib/mysql
+    networks:
+      - dev-env-network
   pg12:
     container_name: pg12
     image: postgres:12.2-alpine
@@ -39,6 +46,8 @@ services:
       - 55432:5432
     volumes:
       - ./.volumes/pg12/data:/var/lib/postgresql/data
+    networks:
+      - dev-env-network
   rabbitmq3:
     container_name: rabbitmq3
     image: rabbitmq:3.8.3-management-alpine
@@ -55,6 +64,8 @@ services:
       - 55683:1883
     volumes:
       - ./.volumes/rabbitmq3/data:/var/lib/rabbitmq
+    networks:
+      - dev-env-network
   jenkins:
     container_name: jenkins
     build:
@@ -70,6 +81,8 @@ services:
       - ./.volumes/jenkins/data:/var/jenkins_home
       - ./jenkins/casc.yaml:/var/jenkins_home/jenkins.yaml
       - /var/run/docker.sock:/var/run/docker.sock # share host docker daemon with container
+    networks:
+      - dev-env-network
   mssql19:
     container_name: mssql2019
     image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
@@ -83,3 +96,52 @@ services:
       - 51434:1434
     volumes:
       - ./.volumes/mssql19/data:/var/opt/mssql
+    networks:
+      - dev-env-network
+  mongo4:
+    container_name: mongo4
+    image: mongo:4.4.9
+    ports:
+      - 57017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pa55w0rd
+    volumes:
+      - ./.volumes/mongo4/data:/data/db
+    networks:
+      - dev-env-network
+  zookeeper:
+    container_name: zookeeper
+    hostname: zookeeper
+    image: confluentinc/cp-zookeeper:7.2.0
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - ./.volumes/zookeeper/data:/var/lib/zookeeper/data
+    networks:
+      - dev-env-network
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:7.2.0
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: '1'
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9093,BROKER://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: BROKER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
+      KAFKA_ADVERTISED_LISTENERS: BROKER://127.0.0.1:9092
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: '1'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
+    volumes:
+      - ./kafka/ensure:/etc/confluent/docker/ensure
+      - ./.volumes/kafka/data:/var/lib/kafka/data
+    networks:
+      - dev-env-network
